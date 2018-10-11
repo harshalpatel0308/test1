@@ -1,0 +1,101 @@
+//Facetlist.css
+
+.THIS {
+    
+} 
+.nomargin.THIS{
+    margin:0 !important;
+}
+
+.burger.THIS{
+    font-size:1.5em;
+    position:relative;
+    display:inline;
+    vertical-align:middle;
+    cursor:pointer;
+    padding:0 0 0 1.5%;
+}
+.card.THIS{
+    position:relative;
+    border-radius:5px;
+    width:20%;
+	box-shadow:0 2px 2px 2px grey;
+    margin:0 0 0 1%;
+    font-size:1em;
+   
+   
+} 
+.THIS div.facet {
+	display:none;
+    position:absolute;	
+    left:100%;
+    top:20%;
+}
+.THIS .toggle {
+    display: none;
+}
+.THIS ul:hover div.facet{
+    display:block;
+}
+
+
+.THIS .childfacetcol{
+    max-width:17em;
+    overflow:hidden;
+    padding:2px 2px 2px 2px;
+ 
+}
+
+.THIS .childfacetrow{
+    padding-top:50px;
+}
+/*data Table */
+.THIS.rightContainer {
+    display: inline;
+    position:relative;
+    float:right;
+    width: 80%;
+    margin:auto;
+    padding-right: 1.5em;
+}
+
+.THIS.search{
+	display:inline-block;
+    margin:2% 0 2% 18%;
+    width:40%;
+}
+
+.THIS.container{
+    display:flex;
+    width:99%;
+    flex-direction:row;
+    justify-content:space-around;
+}
+.THIS .nav{
+    width:20%;
+    margin:1% 0 0 1%;
+    position:relative;
+    border-radius:5px;
+	box-shadow:1px 1px 1px 1px grey;
+    margin:0 0 0 1%;
+    font-size:1em;
+    
+}
+.THIS .dTable{
+    width: 100%;
+    min-height:auto;
+    margin:1% 0 0 1%;
+    padding:.5em;
+    position:relative;
+    border-radius:5px;
+	box-shadow:1px 1px 1px 1px grey;
+    margin:0 0 0 1%;
+    font-size:1em;
+    overflow:auto;
+}
+.THIS.xxx{
+    width:80%;
+    }
+.THIS .popover{
+    padding:10px;
+}

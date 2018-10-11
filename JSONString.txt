@@ -1,0 +1,9 @@
+// JSONString.apxc
+
+public class JSONString {
+    
+       public static string myJsonFormat = 
+           '[ {"Facet": "CoverageEmployee","DisplayName": "[Coverage Employee Name]","Item": "VERCAUTEREN,KEVIN B","ItemCount": 10,"FacetCount": 139437,"PercentShare": null}, {"Facet": "CoverageEmployee","DisplayName": "[Coverage Employee Name]","Item": "MONTES,KRISTA M","ItemCount": 10,"FacetCount": 484402,"PercentShare": null},{"Facet": "Reg_City","DisplayName": "[City]","Item": "New York","ItemCount": 10,"FacetCount": 12659,"PercentShare": null},{"Facet":"Reg_Country_Code","DisplayName":"[Country]","Item":"CO","ItemCount":10,"FacetCount":1112,"PercentShare":null},{"Facet":"Reg_Zip","DisplayName":"[Zip]","Item":"23921","ItemCount":10,"FacetCount":2359915,"PercentShare":null},{"Facet": "Reg_City","DisplayName": "[City]","Item": "Atlanta","ItemCount": 10,"FacetCount": 15491,"PercentShare": null}]';
+       
+	
+}

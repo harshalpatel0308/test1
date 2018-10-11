@@ -1,0 +1,135 @@
+//FacetlistController.js
+
+({
+    doInit : function(component, event, helper) {
+        
+           var action = component.get("c.getData");
+            action.setCallback(this, function(a) {
+                if(a.getState() === "SUCCESS"){
+                    console.log(a.getReturnValue());
+                    var retResponse = a.getReturnValue();
+                    retResponse.sort(function(a, b) {
+                       return parseInt(a.FaceLiftSortOrder) - parseFloat(b.FaceLiftSortOrder);
+                   });
+                    component.set("v.facetTop",retResponse);
+                    console.log('after sorting'+JSON.stringify(retResponse));
+                    
+                    
+                }
+            });
+            $A.enqueueAction(action);     
+    },
+    openFacet : function(component, event, helper) {
+        var cmpTarget = component.find('pop');
+        
+        $A.util.removeClass(cmpTarget, 'slds-hide');
+        $A.util.addClass(cmpTarget, 'slds-show');
+    },
+    PopulateData : function(component, event, helper) {
+        //alert( event.currentTarget.id);
+         helper.getTableData(component, event,event.currentTarget.id);
+        //helper.dTable(component, event,event.currentTarget.id);
+        //alert(event.getSource().get("v.value"));
+    },
+    closeFacet : function(component, event, helper) {
+        var cmpTarget = component.find('pop');
+        $A.util.removeClass(cmpTarget, 'slds-show');
+        $A.util.addClass(cmpTarget, 'slds-hide');
+        
+        
+    },
+    toggle: function(component,event,helper){
+        var toggleList=component.find("list");
+        $A.util.toggleClass(toggleList,"toggle");
+    },
+    
+ //Search Bar
+  searchKeyChange: function(component, event,helper) {
+     
+    // get the value of the new searchKey available in the event object
+    //var searchKey = event.getParam("searchKey");
+       var searchKey = event.currentTarget.value;
+      if(event.keyCode == 13){
+          component.set('v.IsSpinner',true);
+         //invoke the findByName() method in the Apex controller
+            var find = component.get("c.findByName");
+            find.setParams({"searchKey": searchKey});
+             /*
+             * When the asynchronous call returns, you assign the
+             *  list of facets returned by findByName() to the component's
+             *  facets attribute.
+             */
+            find.setCallback(this, function(data) {
+              console.log(data.getReturnValue());
+              var dCols = [];
+                for(var i=0;i<component.get("v.GridColumn").length;i++){
+                    if(component.get("v.GridColumn")[i].DisplayName == 'Action'){
+                       dCols.push({
+                            "label": component.get("v.GridColumn")[i].DisplayName, 
+                            "fieldName": component.get("v.GridColumn")[i].DeveloperName, 
+                            "type": 'text',
+                            "cellAttributes":{"iconName": { "fieldName": 'trendIcon1' }, 
+                                                                            "iconLabel": { "fieldName": 'CRM' }, 
+                                                                            "iconPosition": 'right',
+                                                                            "iconAlternativeText": 'In CRM?' }
+                        }); 
+                    }else{
+                       dCols.push({
+                            "label": component.get("v.GridColumn")[i].DisplayName, 
+                            "fieldName": component.get("v.GridColumn")[i].DeveloperName, 
+                            "type": 'text'
+                        }); 
+                    }
+                    
+                }
+                component.set('v.columns',dCols);
+                
+                for(var i=0;i<data.getReturnValue().length;i++){
+                    data.getReturnValue()[i].trendIcon1 = 'utility:salesforce1';
+                    data.getReturnValue()[i].trendIcon2 = 'utility:info';
+                }
+                component.set('v.data', data.getReturnValue()); 
+                 component.set('v.IsSpinner',false);
+              //component.set("v.facets", data.getReturnValue());
+            });
+          // adds the call to the queue of asynchronous server calls.
+         $A.enqueueAction(find);
+      }
+    
+  },
+       
+    dTable: function (component, event, helper) {
+        
+        var CustomMetaDataConfig = component.get("c.getMetaDataConfig");
+            CustomMetaDataConfig.setCallback(this, function(a) {
+                if(a.getState() === "SUCCESS"){
+                    console.log(a.getReturnValue());
+                    var GridColumn = [];
+                    var retResponse = a.getReturnValue();  
+                    for(var i=0;i<retResponse.length;i++){
+                        if(retResponse[i].Display__c == 'InGrid' || retResponse[i].Display__c == 'Both'){
+                            GridColumn.push({
+                                "DeveloperName":retResponse[i].DeveloperName,
+                                "DisplayName":retResponse[i].DisplayName__c,
+                                "ColumnOrder":retResponse[i].SelectOrder__c
+                            }); 
+                            GridColumn.sort(function(a, b) {
+                               return parseInt(a.ColumnOrder) - parseFloat(b.ColumnOrder);
+                           });
+                        }
+                    }
+                    console.log('GridColumn'+JSON.stringify(GridColumn));
+                    component.set("v.GridColumn",GridColumn);
+                }
+            });
+            $A.enqueueAction(CustomMetaDataConfig); 
+    },
+    getSelectedName: function (cmp, event) {
+        var selectedRows = event.getParam('selectedRows');
+        // Display that fieldName of the selected rows
+        for (var i = 0; i < selectedRows.length; i++){
+            alert("You selected: " + selectedRows[i].opportunityName);
+        }
+    }
+    
+});

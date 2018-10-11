@@ -1,0 +1,103 @@
+//Facetlist.cmp
+
+<aura:component implements="force:appHostable" controller="FaceliftController">
+    <aura:attribute name="facetTop" type="Object[]"     />
+    <aura:attribute name="facetList" type="Object[]"     />
+    <aura:attribute name="data" type="Object"/>
+    <aura:attribute name="columns" type="List"/>
+    <aura:attribute name="searchKey" type="String"/>
+    
+    <aura:attribute name="IsSpinner" type="Boolean" default="false"/>
+    
+    <aura:attribute name="GridColumn" type="Object[]"/>
+    <aura:attribute name="MoreInfoColumn" type="Object[]"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />   
+    <aura:handler name="init" value="{!this}" action="{!c.dTable}" /> 
+    
+    <!-- <aura:handler event="c:SearchKeyChange" action="{!c.searchKeyChange}"/> -->
+    
+    <div class="burger nomargin" onclick="{!c.toggle}"  >&#9776; </div> 
+    
+    <aura:if isTrue="{!v.IsSpinner}">
+       <lightning:spinner variant="brand"  size="large" />
+      </aura:if>
+    
+    <div class="slds-form-element__control search">
+        <input id="text-input-id-1" class="slds-input" type="text" onkeyup ="{!c.searchKeyChange}" placeholder="Refine Query" icon="info"  />   
+    </div>
+    <!-- FacetList and Lightning Datatable --> 
+    <div class="container" >
+        <div class="nav" aura:id="list" >       
+            <div class="slds-card__header slds-grid">
+                <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                    <!--<div class="down" onclick="{!c.toggle}">> </div>-->
+                    <h2 class="slds-card__header-title">
+                        <span class="slds-text-heading_large">Facets List</span>
+                    </h2>                     
+                </header>                
+            </div>           
+            <div class="slds-media__body">
+                <nav class="slds-nav-vertical slds-nav-vertical_shade" aria-label="Sub page" >
+                    <div class="slds-nav-vertical__section">               
+                        <aura:iteration items="{!v.facetTop}" var="row" >
+                            <ul>
+                                <li class="slds-nav-vertical__item" >
+                                    <a class="slds-nav-vertical__action" aria-describedby="entity-header" aria-current="page" onmouseenter="{!c.openFacet}" onmouseout="{!c.closeFacet}">{!row.DisplayName}
+                                        <span class="slds-badge slds-col_bump-left" style="align:right">{!row.ItemCount}</span>
+                                        <div aura:id="pop"  class="facet slds-popover slds-popover_medium" role="dialog" aria-label="Dialog Title" aria-describedby="dialog-body-id-30">
+                                            <nav class="slds-nav-vertical" aria-label="Sub page">
+                                                <div class="slds-nav-vertical__section">
+                                                    <ul>
+                                                        <li class="slds-nav-vertical__item" >
+                                                            <a class="slds-nav-vertical__action" aria-describedby="entity-header" aria-current="page">
+                                                                <b>Top  {!row.ItemCount}&nbsp;&nbsp; {!row.DisplayName}</b>
+                                                            </a>
+                                                        </li> 
+                                                   <li>   
+                                                      
+                                                       
+                                               <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                                                             <aura:iteration items="{!row.Items_FacetCountsList}" var="top1" >
+                                                                <tr class="slds-hint-parent slds-cell-wrap childfacetrow  ">
+                                                                    <td class="childfacetcol">
+                                                                        <a class="slds-text-link--reset" id="{!top1.Item}" onclick="{!c.PopulateData}"> 
+                                                                                {!top1.Item}<br/>
+                                                                        </a>
+                                                                    </td>
+                                                                    <td class="childfacetcol">
+                                                                        <!--<aura:iteration items="{!row.Items_FacetCountsList}" var="top2" >-->
+                                                                            {!top1.FacetCount}<br/>
+                                                                        
+                                                                    </td>
+                                                                 </tr>
+                                                               </aura:iteration>
+                                                            </table> 
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </nav>
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
+                            
+                        </aura:iteration>
+                    </div>
+                </nav>
+            </div>
+            
+        </div>   
+        <div class="dTable slds-box slds-theme_default">
+            <div aura:id="presearch">
+            
+                <lightning:datatable data="{! v.data }"
+                                 columns="{! v.columns }"
+                                 keyField="id"
+                                 onrowselection="{! c.getSelectedName }"
+                                 hideCheckboxColumn="true"/>
+            
+            </div> 
+            </div>
+    </div>
+</aura:component>
