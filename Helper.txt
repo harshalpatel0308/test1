@@ -1,0 +1,81 @@
+//FacetlistHelper
+
+({
+	getTableData : function(component, event, DisplayName) {
+         component.set('v.IsSpinner',true);
+		 var action = component.get("c.getTableData");
+         action.setParams({ 
+                Facet : 'Facet',
+             DisplayName: DisplayName
+         });
+            action.setCallback(this, function(a) {
+                if(a.getState() === "SUCCESS"){
+                    var retResponse = a.getReturnValue();
+                    //console.log('helper response'+JSON.stringify(retResponse));
+                    this.dTable(component, event,retResponse);
+                    
+                }
+            });
+            $A.enqueueAction(action); 
+	},
+    dTable: function (cmp, event, myJson) {
+        /* cmp.set('v.columns', [
+            {label: 'action', fieldName: 'action', cellAttributes:{iconName: { fieldName: 'trendIcon1' }, 
+                                                                    iconLabel: { fieldName: 'CRM' }, 
+                                                                    iconPosition: 'right',
+                                                                    iconAlternativeText: 'In CRM?' }},
+            {label: 'Legal Name', fieldName: 'LegalName', type: 'text'},
+            {label: 'WCIS SUP Name', fieldName: 'WcisSupName', type: 'text'},
+            {label: 'Wholesale Customer/Prospect', fieldName: 'WCust', type: 'text'},
+            {label: 'City', fieldName: 'city', type: 'text'},
+            {label: 'State', fieldName: 'state', type: 'text'},
+            {label: 'Country', fieldName: 'country', type: 'text'}
+        ]);
+       
+       var filteredRes = [];
+        for(var i=0;i<myJson.length;i++){
+            filteredRes.push({
+                "id": 'a',
+                "LegalName":myJson[i].Legal_Name,
+                "WcisSupName":'?' ,
+                "WCust": '?',
+                "city": myJson[i].Reg_City,
+                "state": myJson[i].Reg_State_Code,
+                "country": myJson[i].Reg_Country_Code,
+                "trendIcon1": 'utility:salesforce1',
+                "trendIcon2": 'utility:info'
+            });
+        }
+
+        cmp.set('v.data', filteredRes);*/
+        var dCols = [];
+        for(var i=0;i<cmp.get("v.GridColumn").length;i++){
+            if(cmp.get("v.GridColumn")[i].DisplayName == 'Action'){
+               dCols.push({
+                    "label": cmp.get("v.GridColumn")[i].DisplayName, 
+                    "fieldName": cmp.get("v.GridColumn")[i].DeveloperName, 
+                    "type": 'text',
+                    "cellAttributes":{"iconName": { "fieldName": 'trendIcon1' }, 
+                                                                    "iconLabel": { "fieldName": 'CRM' }, 
+                                                                    "iconPosition": 'right',
+                                                                    "iconAlternativeText": 'In CRM?' }
+                }); 
+            }else{
+               dCols.push({
+                    "label": cmp.get("v.GridColumn")[i].DisplayName, 
+                    "fieldName": cmp.get("v.GridColumn")[i].DeveloperName, 
+                    "type": 'text'
+                }); 
+            }
+            
+        }
+        cmp.set('v.columns',dCols);
+
+        for(var i=0;i<myJson.length;i++){
+            myJson[i].trendIcon1 = 'utility:salesforce1';
+            myJson[i].trendIcon2 = 'utility:info';
+        }
+        cmp.set('v.data', myJson); 
+        cmp.set('v.IsSpinner',false);
+    }
+})
